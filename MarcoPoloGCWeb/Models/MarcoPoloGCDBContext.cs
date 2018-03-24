@@ -13,25 +13,18 @@ namespace MarcoPoloGCWeb.Models
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual DbSet<Gcoutlet> Gcoutlet { get; set; }
         public virtual DbSet<Gcpurchase> Gcpurchase { get; set; }
         public virtual DbSet<Gcredemption> Gcredemption { get; set; }
         public virtual DbSet<GcservicesType> GcservicesType { get; set; }
         public virtual DbSet<Gctype> Gctype { get; set; }
         public virtual DbSet<GiftCertificate> GiftCertificate { get; set; }
+        public virtual DbSet<Outlet> Outlet { get; set; }
         public virtual DbSet<ServicesType> ServicesType { get; set; }
 
         public MarcoPoloGCDBContext(DbContextOptions<MarcoPoloGCDBContext> options)
-        : base(options)
-            { }
-        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //        {
-        //            if (!optionsBuilder.IsConfigured)
-        //            {
-        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-        //                optionsBuilder.UseSqlServer(@"Server=66.154.105.185;Database=MarcoPoloGCDB;User ID = sa;Password=Fioretti2508;ConnectRetryCount=0;");
-        //            }
-        //        }
-
+             : base(options)
+                { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AspNetRoleClaims>(entity =>
@@ -123,6 +116,35 @@ namespace MarcoPoloGCWeb.Models
                 entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
             });
 
+            modelBuilder.Entity<Gcoutlet>(entity =>
+            {
+                entity.ToTable("GCOutlet");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.GiftCertificateId).HasColumnName("GiftCertificateID");
+
+                entity.Property(e => e.LastModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.OutletId).HasColumnName("OutletID");
+
+                entity.HasOne(d => d.GiftCertificate)
+                    .WithMany(p => p.Gcoutlet)
+                    .HasForeignKey(d => d.GiftCertificateId)
+                    .HasConstraintName("FK_GCOutlet_GiftCertificate");
+
+                entity.HasOne(d => d.Outlet)
+                    .WithMany(p => p.Gcoutlet)
+                    .HasForeignKey(d => d.OutletId)
+                    .HasConstraintName("FK_GCOutlet_Outlet");
+            });
+
             modelBuilder.Entity<Gcpurchase>(entity =>
             {
                 entity.ToTable("GCPurchase");
@@ -206,16 +228,15 @@ namespace MarcoPoloGCWeb.Models
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Gctype1)
-                    .HasColumnName("GCType")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.LastModifiedBy)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<GiftCertificate>(entity =>
@@ -226,7 +247,7 @@ namespace MarcoPoloGCWeb.Models
 
                 entity.Property(e => e.DtipermitNo)
                     .HasColumnName("DTIPermitNo")
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .IsUnicode(false);
 
                 entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
@@ -241,7 +262,10 @@ namespace MarcoPoloGCWeb.Models
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.ValidityPeriod).HasColumnType("datetime");
+                entity.Property(e => e.Qrcode)
+                    .HasColumnName("QRCode")
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Value).HasColumnType("decimal(9, 2)");
 
@@ -249,6 +273,23 @@ namespace MarcoPoloGCWeb.Models
                     .WithMany(p => p.GiftCertificate)
                     .HasForeignKey(d => d.GctypeId)
                     .HasConstraintName("FK_GiftCertificate_GCType");
+            });
+
+            modelBuilder.Entity<Outlet>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.LastModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<ServicesType>(entity =>
@@ -263,10 +304,7 @@ namespace MarcoPoloGCWeb.Models
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.ServicesType1)
-                    .HasColumnName("ServicesType")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.Name).IsUnicode(false);
             });
         }
     }

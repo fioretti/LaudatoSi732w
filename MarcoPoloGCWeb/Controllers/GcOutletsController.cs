@@ -9,23 +9,23 @@ using MarcoPoloGCWeb.Models;
 
 namespace MarcoPoloGCWeb.Controllers
 {
-    public class PurchasesController : Controller
+    public class GcOutletsController : Controller
     {
         private readonly MarcoPoloGCDBContext _context;
 
-        public PurchasesController(MarcoPoloGCDBContext context)
+        public GcOutletsController(MarcoPoloGCDBContext context)
         {
             _context = context;
         }
 
-        // GET: Gcpurchases
+        // GET: GcOutlets
         public async Task<IActionResult> Index()
         {
-            var marcoPoloGCDBContext = _context.Gcpurchase.Include(g => g.GiftCertificate);
+            var marcoPoloGCDBContext = _context.Gcoutlet.Include(g => g.GiftCertificate).Include(g => g.Outlet);
             return View(await marcoPoloGCDBContext.ToListAsync());
         }
 
-        // GET: Gcpurchases/Details/5
+        // GET: GcOutlets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,42 +33,45 @@ namespace MarcoPoloGCWeb.Controllers
                 return NotFound();
             }
 
-            var gcpurchase = await _context.Gcpurchase
+            var gcoutlet = await _context.Gcoutlet
                 .Include(g => g.GiftCertificate)
+                .Include(g => g.Outlet)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (gcpurchase == null)
+            if (gcoutlet == null)
             {
                 return NotFound();
             }
 
-            return View(gcpurchase);
+            return View(gcoutlet);
         }
 
-        // GET: Gcpurchases/Create
+        // GET: GcOutlets/Create
         public IActionResult Create()
         {
             ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id");
+            ViewData["OutletId"] = new SelectList(_context.Outlet, "Id", "Id");
             return View();
         }
 
-        // POST: Gcpurchases/Create
+        // POST: GcOutlets/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,GiftCertificateId,PurchaseDate,LastModifiedBy,CreatedDate,ModifiedDate")] Gcpurchase gcpurchase)
+        public async Task<IActionResult> Create([Bind("Id,GiftCertificateId,OutletId,LastModifiedBy,CreatedDate,ModifiedDate")] Gcoutlet gcoutlet)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(gcpurchase);
+                _context.Add(gcoutlet);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcpurchase.GiftCertificateId);
-            return View(gcpurchase);
+            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcoutlet.GiftCertificateId);
+            ViewData["OutletId"] = new SelectList(_context.Outlet, "Id", "Id", gcoutlet.OutletId);
+            return View(gcoutlet);
         }
 
-        // GET: Gcpurchases/Edit/5
+        // GET: GcOutlets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,23 +79,24 @@ namespace MarcoPoloGCWeb.Controllers
                 return NotFound();
             }
 
-            var gcpurchase = await _context.Gcpurchase.SingleOrDefaultAsync(m => m.Id == id);
-            if (gcpurchase == null)
+            var gcoutlet = await _context.Gcoutlet.SingleOrDefaultAsync(m => m.Id == id);
+            if (gcoutlet == null)
             {
                 return NotFound();
             }
-            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcpurchase.GiftCertificateId);
-            return View(gcpurchase);
+            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcoutlet.GiftCertificateId);
+            ViewData["OutletId"] = new SelectList(_context.Outlet, "Id", "Id", gcoutlet.OutletId);
+            return View(gcoutlet);
         }
 
-        // POST: Gcpurchases/Edit/5
+        // POST: GcOutlets/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,GiftCertificateId,PurchaseDate,LastModifiedBy,CreatedDate,ModifiedDate")] Gcpurchase gcpurchase)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,GiftCertificateId,OutletId,LastModifiedBy,CreatedDate,ModifiedDate")] Gcoutlet gcoutlet)
         {
-            if (id != gcpurchase.Id)
+            if (id != gcoutlet.Id)
             {
                 return NotFound();
             }
@@ -101,12 +105,12 @@ namespace MarcoPoloGCWeb.Controllers
             {
                 try
                 {
-                    _context.Update(gcpurchase);
+                    _context.Update(gcoutlet);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GcpurchaseExists(gcpurchase.Id))
+                    if (!GcoutletExists(gcoutlet.Id))
                     {
                         return NotFound();
                     }
@@ -117,11 +121,12 @@ namespace MarcoPoloGCWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcpurchase.GiftCertificateId);
-            return View(gcpurchase);
+            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcoutlet.GiftCertificateId);
+            ViewData["OutletId"] = new SelectList(_context.Outlet, "Id", "Id", gcoutlet.OutletId);
+            return View(gcoutlet);
         }
 
-        // GET: Gcpurchases/Delete/5
+        // GET: GcOutlets/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,31 +134,32 @@ namespace MarcoPoloGCWeb.Controllers
                 return NotFound();
             }
 
-            var gcpurchase = await _context.Gcpurchase
+            var gcoutlet = await _context.Gcoutlet
                 .Include(g => g.GiftCertificate)
+                .Include(g => g.Outlet)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (gcpurchase == null)
+            if (gcoutlet == null)
             {
                 return NotFound();
             }
 
-            return View(gcpurchase);
+            return View(gcoutlet);
         }
 
-        // POST: Gcpurchases/Delete/5
+        // POST: GcOutlets/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var gcpurchase = await _context.Gcpurchase.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Gcpurchase.Remove(gcpurchase);
+            var gcoutlet = await _context.Gcoutlet.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Gcoutlet.Remove(gcoutlet);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GcpurchaseExists(int id)
+        private bool GcoutletExists(int id)
         {
-            return _context.Gcpurchase.Any(e => e.Id == id);
+            return _context.Gcoutlet.Any(e => e.Id == id);
         }
     }
 }

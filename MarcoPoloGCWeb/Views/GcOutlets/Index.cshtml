@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MarcoPoloGCWeb.Models.GiftCertificate>
+﻿@model IEnumerable<MarcoPoloGCWeb.Models.Gcoutlet>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,18 +13,6 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Value)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IssuanceDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DtipermitNo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ExpirationDate)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.LastModifiedBy)
                 </th>
                 <th>
@@ -33,11 +21,11 @@
                 <th>
                     @Html.DisplayNameFor(model => model.ModifiedDate)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Qrcode)
-                </th>
             <th>
-                @Html.DisplayNameFor(model => model.Gctype)
+                @Html.DisplayNameFor(model => model.GiftCertificate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Outlet)
             </th>
             <th></th>
         </tr>
@@ -45,18 +33,6 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Value)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IssuanceDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DtipermitNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpirationDate)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LastModifiedBy)
             </td>
@@ -67,10 +43,10 @@
                 @Html.DisplayFor(modelItem => item.ModifiedDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Qrcode)
+                @Html.DisplayFor(modelItem => item.GiftCertificate.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Gctype.Id)
+                @Html.DisplayFor(modelItem => item.Outlet.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

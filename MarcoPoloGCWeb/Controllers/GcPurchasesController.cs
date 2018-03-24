@@ -9,85 +9,90 @@ using MarcoPoloGCWeb.Models;
 
 namespace MarcoPoloGCWeb.Controllers
 {
-    public class UsersController : Controller
+    public class GcPurchasesController : Controller
     {
         private readonly MarcoPoloGCDBContext _context;
 
-        public UsersController(MarcoPoloGCDBContext context)
+        public GcPurchasesController(MarcoPoloGCDBContext context)
         {
             _context = context;
         }
 
-        // GET: Users
+        // GET: GcPurchases
         public async Task<IActionResult> Index()
         {
-            return View(await _context.AspNetUsers.ToListAsync());
+            var marcoPoloGCDBContext = _context.Gcpurchase.Include(g => g.GiftCertificate);
+            return View(await marcoPoloGCDBContext.ToListAsync());
         }
 
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(string id)
+        // GET: GcPurchases/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var aspNetUsers = await _context.AspNetUsers
+            var gcpurchase = await _context.Gcpurchase
+                .Include(g => g.GiftCertificate)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (aspNetUsers == null)
+            if (gcpurchase == null)
             {
                 return NotFound();
             }
 
-            return View(aspNetUsers);
+            return View(gcpurchase);
         }
 
-        // GET: Users/Create
+        // GET: GcPurchases/Create
         public IActionResult Create()
         {
+            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id");
             return View();
         }
 
-        // POST: Users/Create
+        // POST: GcPurchases/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AccessFailedCount,ConcurrencyStamp,Email,EmailConfirmed,LockoutEnabled,LockoutEnd,NormalizedEmail,NormalizedUserName,PasswordHash,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName")] AspNetUsers aspNetUsers)
+        public async Task<IActionResult> Create([Bind("Id,GiftCertificateId,PurchaseDate,LastModifiedBy,CreatedDate,ModifiedDate")] Gcpurchase gcpurchase)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(aspNetUsers);
+                _context.Add(gcpurchase);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(aspNetUsers);
+            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcpurchase.GiftCertificateId);
+            return View(gcpurchase);
         }
 
-        // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        // GET: GcPurchases/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var aspNetUsers = await _context.AspNetUsers.SingleOrDefaultAsync(m => m.Id == id);
-            if (aspNetUsers == null)
+            var gcpurchase = await _context.Gcpurchase.SingleOrDefaultAsync(m => m.Id == id);
+            if (gcpurchase == null)
             {
                 return NotFound();
             }
-            return View(aspNetUsers);
+            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcpurchase.GiftCertificateId);
+            return View(gcpurchase);
         }
 
-        // POST: Users/Edit/5
+        // POST: GcPurchases/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,AccessFailedCount,ConcurrencyStamp,Email,EmailConfirmed,LockoutEnabled,LockoutEnd,NormalizedEmail,NormalizedUserName,PasswordHash,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName")] AspNetUsers aspNetUsers)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,GiftCertificateId,PurchaseDate,LastModifiedBy,CreatedDate,ModifiedDate")] Gcpurchase gcpurchase)
         {
-            if (id != aspNetUsers.Id)
+            if (id != gcpurchase.Id)
             {
                 return NotFound();
             }
@@ -96,12 +101,12 @@ namespace MarcoPoloGCWeb.Controllers
             {
                 try
                 {
-                    _context.Update(aspNetUsers);
+                    _context.Update(gcpurchase);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AspNetUsersExists(aspNetUsers.Id))
+                    if (!GcpurchaseExists(gcpurchase.Id))
                     {
                         return NotFound();
                     }
@@ -112,41 +117,43 @@ namespace MarcoPoloGCWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(aspNetUsers);
+            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcpurchase.GiftCertificateId);
+            return View(gcpurchase);
         }
 
-        // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        // GET: GcPurchases/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var aspNetUsers = await _context.AspNetUsers
+            var gcpurchase = await _context.Gcpurchase
+                .Include(g => g.GiftCertificate)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (aspNetUsers == null)
+            if (gcpurchase == null)
             {
                 return NotFound();
             }
 
-            return View(aspNetUsers);
+            return View(gcpurchase);
         }
 
-        // POST: Users/Delete/5
+        // POST: GcPurchases/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var aspNetUsers = await _context.AspNetUsers.SingleOrDefaultAsync(m => m.Id == id);
-            _context.AspNetUsers.Remove(aspNetUsers);
+            var gcpurchase = await _context.Gcpurchase.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Gcpurchase.Remove(gcpurchase);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AspNetUsersExists(string id)
+        private bool GcpurchaseExists(int id)
         {
-            return _context.AspNetUsers.Any(e => e.Id == id);
+            return _context.Gcpurchase.Any(e => e.Id == id);
         }
     }
 }

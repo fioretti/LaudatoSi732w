@@ -9,23 +9,22 @@ using MarcoPoloGCWeb.Models;
 
 namespace MarcoPoloGCWeb.Controllers
 {
-    public class RedemptionsController : Controller
+    public class OutletsController : Controller
     {
         private readonly MarcoPoloGCDBContext _context;
 
-        public RedemptionsController(MarcoPoloGCDBContext context)
+        public OutletsController(MarcoPoloGCDBContext context)
         {
             _context = context;
         }
 
-        // GET: Gcredemptions
+        // GET: Outlets
         public async Task<IActionResult> Index()
         {
-            var marcoPoloGCDBContext = _context.Gcredemption.Include(g => g.GiftCertificate);
-            return View(await marcoPoloGCDBContext.ToListAsync());
+            return View(await _context.Outlet.ToListAsync());
         }
 
-        // GET: Gcredemptions/Details/5
+        // GET: Outlets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,42 +32,39 @@ namespace MarcoPoloGCWeb.Controllers
                 return NotFound();
             }
 
-            var gcredemption = await _context.Gcredemption
-                .Include(g => g.GiftCertificate)
+            var outlet = await _context.Outlet
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (gcredemption == null)
+            if (outlet == null)
             {
                 return NotFound();
             }
 
-            return View(gcredemption);
+            return View(outlet);
         }
 
-        // GET: Gcredemptions/Create
+        // GET: Outlets/Create
         public IActionResult Create()
         {
-            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id");
             return View();
         }
 
-        // POST: Gcredemptions/Create
+        // POST: Outlets/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,GiftCertificateId,RedemptionDate,LastModifiedBy,CreatedDate,ModifiedDate")] Gcredemption gcredemption)
+        public async Task<IActionResult> Create([Bind("Id,Name,LastModifiedBy,CreatedDate,ModifiedDate")] Outlet outlet)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(gcredemption);
+                _context.Add(outlet);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcredemption.GiftCertificateId);
-            return View(gcredemption);
+            return View(outlet);
         }
 
-        // GET: Gcredemptions/Edit/5
+        // GET: Outlets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,23 +72,22 @@ namespace MarcoPoloGCWeb.Controllers
                 return NotFound();
             }
 
-            var gcredemption = await _context.Gcredemption.SingleOrDefaultAsync(m => m.Id == id);
-            if (gcredemption == null)
+            var outlet = await _context.Outlet.SingleOrDefaultAsync(m => m.Id == id);
+            if (outlet == null)
             {
                 return NotFound();
             }
-            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcredemption.GiftCertificateId);
-            return View(gcredemption);
+            return View(outlet);
         }
 
-        // POST: Gcredemptions/Edit/5
+        // POST: Outlets/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,GiftCertificateId,RedemptionDate,LastModifiedBy,CreatedDate,ModifiedDate")] Gcredemption gcredemption)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LastModifiedBy,CreatedDate,ModifiedDate")] Outlet outlet)
         {
-            if (id != gcredemption.Id)
+            if (id != outlet.Id)
             {
                 return NotFound();
             }
@@ -101,12 +96,12 @@ namespace MarcoPoloGCWeb.Controllers
             {
                 try
                 {
-                    _context.Update(gcredemption);
+                    _context.Update(outlet);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GcredemptionExists(gcredemption.Id))
+                    if (!OutletExists(outlet.Id))
                     {
                         return NotFound();
                     }
@@ -117,11 +112,10 @@ namespace MarcoPoloGCWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcredemption.GiftCertificateId);
-            return View(gcredemption);
+            return View(outlet);
         }
 
-        // GET: Gcredemptions/Delete/5
+        // GET: Outlets/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,31 +123,30 @@ namespace MarcoPoloGCWeb.Controllers
                 return NotFound();
             }
 
-            var gcredemption = await _context.Gcredemption
-                .Include(g => g.GiftCertificate)
+            var outlet = await _context.Outlet
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (gcredemption == null)
+            if (outlet == null)
             {
                 return NotFound();
             }
 
-            return View(gcredemption);
+            return View(outlet);
         }
 
-        // POST: Gcredemptions/Delete/5
+        // POST: Outlets/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var gcredemption = await _context.Gcredemption.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Gcredemption.Remove(gcredemption);
+            var outlet = await _context.Outlet.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Outlet.Remove(outlet);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GcredemptionExists(int id)
+        private bool OutletExists(int id)
         {
-            return _context.Gcredemption.Any(e => e.Id == id);
+            return _context.Outlet.Any(e => e.Id == id);
         }
     }
 }

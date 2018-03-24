@@ -9,85 +9,85 @@ using MarcoPoloGCWeb.Models;
 
 namespace MarcoPoloGCWeb.Controllers
 {
-    public class ServicesTypesController : Controller
+    public class AspNetUsersController : Controller
     {
         private readonly MarcoPoloGCDBContext _context;
 
-        public ServicesTypesController(MarcoPoloGCDBContext context)
+        public AspNetUsersController(MarcoPoloGCDBContext context)
         {
             _context = context;
         }
 
-        // GET: ServicesTypes
+        // GET: AspNetUsers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ServicesType.ToListAsync());
+            return View(await _context.AspNetUsers.ToListAsync());
         }
 
-        // GET: ServicesTypes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: AspNetUsers/Details/5
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var servicesType = await _context.ServicesType
+            var aspNetUsers = await _context.AspNetUsers
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (servicesType == null)
+            if (aspNetUsers == null)
             {
                 return NotFound();
             }
 
-            return View(servicesType);
+            return View(aspNetUsers);
         }
 
-        // GET: ServicesTypes/Create
+        // GET: AspNetUsers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ServicesTypes/Create
+        // POST: AspNetUsers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,LastModifiedBy,CreatedDate,ModifiedDate,Name")] ServicesType servicesType)
+        public async Task<IActionResult> Create([Bind("Id,AccessFailedCount,ConcurrencyStamp,Email,EmailConfirmed,LockoutEnabled,LockoutEnd,NormalizedEmail,NormalizedUserName,PasswordHash,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName")] AspNetUsers aspNetUsers)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(servicesType);
+                _context.Add(aspNetUsers);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(servicesType);
+            return View(aspNetUsers);
         }
 
-        // GET: ServicesTypes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: AspNetUsers/Edit/5
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var servicesType = await _context.ServicesType.SingleOrDefaultAsync(m => m.Id == id);
-            if (servicesType == null)
+            var aspNetUsers = await _context.AspNetUsers.SingleOrDefaultAsync(m => m.Id == id);
+            if (aspNetUsers == null)
             {
                 return NotFound();
             }
-            return View(servicesType);
+            return View(aspNetUsers);
         }
 
-        // POST: ServicesTypes/Edit/5
+        // POST: AspNetUsers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LastModifiedBy,CreatedDate,ModifiedDate,Name")] ServicesType servicesType)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,AccessFailedCount,ConcurrencyStamp,Email,EmailConfirmed,LockoutEnabled,LockoutEnd,NormalizedEmail,NormalizedUserName,PasswordHash,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName")] AspNetUsers aspNetUsers)
         {
-            if (id != servicesType.Id)
+            if (id != aspNetUsers.Id)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace MarcoPoloGCWeb.Controllers
             {
                 try
                 {
-                    _context.Update(servicesType);
+                    _context.Update(aspNetUsers);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ServicesTypeExists(servicesType.Id))
+                    if (!AspNetUsersExists(aspNetUsers.Id))
                     {
                         return NotFound();
                     }
@@ -112,41 +112,41 @@ namespace MarcoPoloGCWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(servicesType);
+            return View(aspNetUsers);
         }
 
-        // GET: ServicesTypes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: AspNetUsers/Delete/5
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var servicesType = await _context.ServicesType
+            var aspNetUsers = await _context.AspNetUsers
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (servicesType == null)
+            if (aspNetUsers == null)
             {
                 return NotFound();
             }
 
-            return View(servicesType);
+            return View(aspNetUsers);
         }
 
-        // POST: ServicesTypes/Delete/5
+        // POST: AspNetUsers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var servicesType = await _context.ServicesType.SingleOrDefaultAsync(m => m.Id == id);
-            _context.ServicesType.Remove(servicesType);
+            var aspNetUsers = await _context.AspNetUsers.SingleOrDefaultAsync(m => m.Id == id);
+            _context.AspNetUsers.Remove(aspNetUsers);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ServicesTypeExists(int id)
+        private bool AspNetUsersExists(string id)
         {
-            return _context.ServicesType.Any(e => e.Id == id);
+            return _context.AspNetUsers.Any(e => e.Id == id);
         }
     }
 }

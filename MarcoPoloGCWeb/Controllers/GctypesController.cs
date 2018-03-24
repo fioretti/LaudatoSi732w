@@ -18,13 +18,13 @@ namespace MarcoPoloGCWeb.Controllers
             _context = context;
         }
 
-        // GET: Gctypes
+        // GET: GcTypes
         public async Task<IActionResult> Index()
         {
             return View(await _context.Gctype.ToListAsync());
         }
 
-        // GET: Gctypes/Details/5
+        // GET: GcTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -42,18 +42,18 @@ namespace MarcoPoloGCWeb.Controllers
             return View(gctype);
         }
 
-        // GET: Gctypes/Create
+        // GET: GcTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Gctypes/Create
+        // POST: GcTypes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Gctype1,LastModifiedBy,CreatedDate,ModifiedDate")] Gctype gctype)
+        public async Task<IActionResult> Create([Bind("Id,LastModifiedBy,CreatedDate,ModifiedDate,Name")] Gctype gctype)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace MarcoPoloGCWeb.Controllers
             return View(gctype);
         }
 
-        // GET: Gctypes/Edit/5
+        // GET: GcTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,12 +80,12 @@ namespace MarcoPoloGCWeb.Controllers
             return View(gctype);
         }
 
-        // POST: Gctypes/Edit/5
+        // POST: GcTypes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Gctype1,LastModifiedBy,CreatedDate,ModifiedDate")] Gctype gctype)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,LastModifiedBy,CreatedDate,ModifiedDate,Name")] Gctype gctype)
         {
             if (id != gctype.Id)
             {
@@ -115,7 +115,7 @@ namespace MarcoPoloGCWeb.Controllers
             return View(gctype);
         }
 
-        // GET: Gctypes/Delete/5
+        // GET: GcTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -133,7 +133,7 @@ namespace MarcoPoloGCWeb.Controllers
             return View(gctype);
         }
 
-        // POST: Gctypes/Delete/5
+        // POST: GcTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

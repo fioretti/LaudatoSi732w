@@ -18,14 +18,14 @@ namespace MarcoPoloGCWeb.Controllers
             _context = context;
         }
 
-        // GET: GcservicesTypes
+        // GET: GcServicesTypes
         public async Task<IActionResult> Index()
         {
             var marcoPoloGCDBContext = _context.GcservicesType.Include(g => g.GiftCertificate).Include(g => g.ServicesType);
             return View(await marcoPoloGCDBContext.ToListAsync());
         }
 
-        // GET: GcservicesTypes/Details/5
+        // GET: GcServicesTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,7 +45,7 @@ namespace MarcoPoloGCWeb.Controllers
             return View(gcservicesType);
         }
 
-        // GET: GcservicesTypes/Create
+        // GET: GcServicesTypes/Create
         public IActionResult Create()
         {
             ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id");
@@ -53,7 +53,7 @@ namespace MarcoPoloGCWeb.Controllers
             return View();
         }
 
-        // POST: GcservicesTypes/Create
+        // POST: GcServicesTypes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -71,7 +71,7 @@ namespace MarcoPoloGCWeb.Controllers
             return View(gcservicesType);
         }
 
-        // GET: GcservicesTypes/Edit/5
+        // GET: GcServicesTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,7 +89,7 @@ namespace MarcoPoloGCWeb.Controllers
             return View(gcservicesType);
         }
 
-        // POST: GcservicesTypes/Edit/5
+        // POST: GcServicesTypes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -126,7 +126,7 @@ namespace MarcoPoloGCWeb.Controllers
             return View(gcservicesType);
         }
 
-        // GET: GcservicesTypes/Delete/5
+        // GET: GcServicesTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -146,7 +146,7 @@ namespace MarcoPoloGCWeb.Controllers
             return View(gcservicesType);
         }
 
-        // POST: GcservicesTypes/Delete/5
+        // POST: GcServicesTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

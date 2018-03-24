@@ -9,23 +9,23 @@ using MarcoPoloGCWeb.Models;
 
 namespace MarcoPoloGCWeb.Controllers
 {
-    public class GiftCertificatesController : Controller
+    public class GcRedemptionsController : Controller
     {
         private readonly MarcoPoloGCDBContext _context;
 
-        public GiftCertificatesController(MarcoPoloGCDBContext context)
+        public GcRedemptionsController(MarcoPoloGCDBContext context)
         {
             _context = context;
         }
 
-        // GET: GiftCertificates
+        // GET: GcRedemptions
         public async Task<IActionResult> Index()
         {
-            var marcoPoloGCDBContext = _context.GiftCertificate.Include(g => g.Gctype);
+            var marcoPoloGCDBContext = _context.Gcredemption.Include(g => g.GiftCertificate);
             return View(await marcoPoloGCDBContext.ToListAsync());
         }
 
-        // GET: GiftCertificates/Details/5
+        // GET: GcRedemptions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,42 +33,42 @@ namespace MarcoPoloGCWeb.Controllers
                 return NotFound();
             }
 
-            var giftCertificate = await _context.GiftCertificate
-                .Include(g => g.Gctype)
+            var gcredemption = await _context.Gcredemption
+                .Include(g => g.GiftCertificate)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (giftCertificate == null)
+            if (gcredemption == null)
             {
                 return NotFound();
             }
 
-            return View(giftCertificate);
+            return View(gcredemption);
         }
 
-        // GET: GiftCertificates/Create
+        // GET: GcRedemptions/Create
         public IActionResult Create()
         {
-            ViewData["GctypeId"] = new SelectList(_context.Gctype, "Id", "Id");
+            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id");
             return View();
         }
 
-        // POST: GiftCertificates/Create
+        // POST: GcRedemptions/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,GctypeId,Value,IssuanceDate,DtipermitNo,ExpirationDate,LastModifiedBy,CreatedDate,ModifiedDate,Qrcode")] GiftCertificate giftCertificate)
+        public async Task<IActionResult> Create([Bind("Id,GiftCertificateId,RedemptionDate,LastModifiedBy,CreatedDate,ModifiedDate")] Gcredemption gcredemption)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(giftCertificate);
+                _context.Add(gcredemption);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GctypeId"] = new SelectList(_context.Gctype, "Id", "Id", giftCertificate.GctypeId);
-            return View(giftCertificate);
+            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcredemption.GiftCertificateId);
+            return View(gcredemption);
         }
 
-        // GET: GiftCertificates/Edit/5
+        // GET: GcRedemptions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,23 +76,23 @@ namespace MarcoPoloGCWeb.Controllers
                 return NotFound();
             }
 
-            var giftCertificate = await _context.GiftCertificate.SingleOrDefaultAsync(m => m.Id == id);
-            if (giftCertificate == null)
+            var gcredemption = await _context.Gcredemption.SingleOrDefaultAsync(m => m.Id == id);
+            if (gcredemption == null)
             {
                 return NotFound();
             }
-            ViewData["GctypeId"] = new SelectList(_context.Gctype, "Id", "Id", giftCertificate.GctypeId);
-            return View(giftCertificate);
+            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcredemption.GiftCertificateId);
+            return View(gcredemption);
         }
 
-        // POST: GiftCertificates/Edit/5
+        // POST: GcRedemptions/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,GctypeId,Value,IssuanceDate,DtipermitNo,ExpirationDate,LastModifiedBy,CreatedDate,ModifiedDate,Qrcode")] GiftCertificate giftCertificate)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,GiftCertificateId,RedemptionDate,LastModifiedBy,CreatedDate,ModifiedDate")] Gcredemption gcredemption)
         {
-            if (id != giftCertificate.Id)
+            if (id != gcredemption.Id)
             {
                 return NotFound();
             }
@@ -101,12 +101,12 @@ namespace MarcoPoloGCWeb.Controllers
             {
                 try
                 {
-                    _context.Update(giftCertificate);
+                    _context.Update(gcredemption);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GiftCertificateExists(giftCertificate.Id))
+                    if (!GcredemptionExists(gcredemption.Id))
                     {
                         return NotFound();
                     }
@@ -117,11 +117,11 @@ namespace MarcoPoloGCWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GctypeId"] = new SelectList(_context.Gctype, "Id", "Id", giftCertificate.GctypeId);
-            return View(giftCertificate);
+            ViewData["GiftCertificateId"] = new SelectList(_context.GiftCertificate, "Id", "Id", gcredemption.GiftCertificateId);
+            return View(gcredemption);
         }
 
-        // GET: GiftCertificates/Delete/5
+        // GET: GcRedemptions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,31 +129,31 @@ namespace MarcoPoloGCWeb.Controllers
                 return NotFound();
             }
 
-            var giftCertificate = await _context.GiftCertificate
-                .Include(g => g.Gctype)
+            var gcredemption = await _context.Gcredemption
+                .Include(g => g.GiftCertificate)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (giftCertificate == null)
+            if (gcredemption == null)
             {
                 return NotFound();
             }
 
-            return View(giftCertificate);
+            return View(gcredemption);
         }
 
-        // POST: GiftCertificates/Delete/5
+        // POST: GcRedemptions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var giftCertificate = await _context.GiftCertificate.SingleOrDefaultAsync(m => m.Id == id);
-            _context.GiftCertificate.Remove(giftCertificate);
+            var gcredemption = await _context.Gcredemption.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Gcredemption.Remove(gcredemption);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GiftCertificateExists(int id)
+        private bool GcredemptionExists(int id)
         {
-            return _context.GiftCertificate.Any(e => e.Id == id);
+            return _context.Gcredemption.Any(e => e.Id == id);
         }
     }
 }
